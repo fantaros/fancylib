@@ -1,0 +1,4 @@
+fancylib
+========
+
+A fancy lib
