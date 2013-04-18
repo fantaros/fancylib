@@ -1,0 +1,14 @@
+﻿<script type="text/javascript" src="libs/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="libs/fancy-extends.js"></script>
+<script type="text/javascript" src="libs/fancy-config.js"></script>
+<script type="text/javascript" src="libs/fancy.js"></script>
+<script>
+	Fancy.baseUrl = "libs/";
+	$(function(){
+		var path = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
+		//console.log(Object.toString.call(Fancy));
+		$("#fancy_stringbuffer").html(Fancy.str("how ").a("to ").a("use ")
+				.a("a StringBuffer in FancyLib").a(" as Fancy.str").s());
+	});
+</script>
+<div id="fancy_stringbuffer"></div>
