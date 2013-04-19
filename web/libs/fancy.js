@@ -42,9 +42,10 @@
 	 * Copy from 'THE BUTTERFLY'
 	 */
 	function isArray(arr) {
-		return arr && typeof arr === "object" && typeof arr.length === "number"
-				&& typeof arr.splice === "function"
-				&& !(arr.propertyIsEnumerable('length'));
+		return arr && typeof arr === "object" 
+			&& typeof arr.length === "number"
+			&& typeof arr.splice === "function"
+			&& !(arr.propertyIsEnumerable('length'));
 	}
 	//jQuery 对象.
 	var $ = window.jQuery;
