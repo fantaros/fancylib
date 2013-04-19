@@ -59,9 +59,6 @@
 		function version(){
 			return _version_;
 		}
-		c.prototype = new Function();
-		c.baseUrl = "";
-		c.libBaseUrl = "./js/fancy/";
 		/**
 		 * 首字母大写.
 		 */

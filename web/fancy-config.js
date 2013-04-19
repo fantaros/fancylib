@@ -8,6 +8,8 @@
  */
 (function(window, undefined) {
 	window.Fancy = (function(c){
+		c.baseUrl = "";
+		c.libBaseUrl = "libs/fancy/";
 		c.config = ["json2","fancy-simplelog"];
 		return c;
 	})(window.Fancy|| function FancyStub(){});
