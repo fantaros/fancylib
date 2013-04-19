@@ -59,9 +59,9 @@
 		function version(){
 			return _version_;
 		}
-		c.prototype = function FancyPrototype(){};
+		c.prototype = new Function();
 		c.baseUrl = "";
-		
+		c.libBaseUrl = "./js/fancy/";
 		/**
 		 * 首字母大写.
 		 */
@@ -279,7 +279,14 @@
 		 * 用jquery加载脚本.
 		 */
 		function load(url) {
-			$.getScript(url);
+			$.ajax({
+				url:url,
+				dataType:"script",
+				async:false,
+				success : function(){
+					
+				}
+			});
 			return this;
 		}
 		/**
@@ -360,7 +367,7 @@
 			if (typeof c.config !== "undefined" && isArray(c.config)) {
 				loop(c.config, function(val) {
 					//循环加载config里配置好的 plugins文件夹下的js文件
-					load(str(Fancy.baseUrl).a("plugins/").a(val)
+					load(str(c.libBaseUrl).a("plugins/").a(val)
 							.a(".js").s());
 				});
 			}
@@ -409,9 +416,5 @@
 		}
 		// 扩展方法并返回Fancy(由 deepen 返回)
 		return loop(getConfig(),dynamicBind),deepen();
-	})(window.Fancy || function FancyStub(){});
+	})(window.Fancy || function Fancy(){});
 })(window);
-$(function(){
-	//Fancy类库产生后加载插件
-	Fancy.loadPlugins();
-});
