@@ -1,0 +1,21 @@
+﻿<script src="json2.js"></script>
+<script src="jquery-1.7.2.min.js"></script>
+<script src="fancy-extends.js"></script>
+<script src="fancy-config.js"></script>
+<script src="fancy.js"></script>
+<script>
+	Fancy.baseUrl = "";
+	$(function(){
+		var path = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
+		console.log(Object.toString.call(Fancy));
+		$("#fancy_stringbuffer").html(Fancy.str("how ").a("to ").a("use ")
+				.a("a StringBuffer in FancyLib").a(" as Fancy.str").s());
+		$("#fancy_bind_test").bind("click",{"a":"a","b":"s"},function(){
+			$(this).html(arguments[0]);
+		});
+	});
+</script>
+<div id="fancy_stringbuffer"></div>
+<div>
+<button id="fancy_bind_test"></button>
+</div>
