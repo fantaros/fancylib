@@ -1,3 +1,0 @@
-$(function(){
-	CKEDITOR.replace("editor");
-});
