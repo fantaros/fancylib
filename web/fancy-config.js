@@ -8,9 +8,10 @@
  */
 (function(window, undefined) {
 	window.Fancy = (function(c){
-		c.baseUrl = "";
-		c.libBaseUrl = "libs/fancy/";
-		c.config = ["json2","fancy-simplelog"];
+		c.baseUrl = "/BCP";
+		c.libBaseUrl = "./js/fancy/";
+		c.config = [ "json2", "functionbuilder", "bind-exec", "fancy-bind",
+				"fancy-rule", "fancy-simplelog" ];
 		return c;
-	})(window.Fancy|| function FancyStub(){});
+	})(window.Fancy|| function Fancy(){});
 })(window);

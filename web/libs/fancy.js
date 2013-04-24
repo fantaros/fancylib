@@ -42,10 +42,9 @@
 	 * Copy from 'THE BUTTERFLY'
 	 */
 	function isArray(arr) {
-		return arr && typeof arr === "object" 
-			&& typeof arr.length === "number"
-			&& typeof arr.splice === "function"
-			&& !(arr.propertyIsEnumerable('length'));
+		return arr && typeof arr === "object" && typeof arr.length === "number"
+				&& typeof arr.splice === "function"
+				&& !(arr.propertyIsEnumerable('length'));
 	}
 	//jQuery 对象.
 	var $ = window.jQuery;
@@ -191,9 +190,7 @@
 					return c[n];
 				} else {
 					console.log(str("找寻属性").a(n).a("失败,返回stub方法!").s());
-					return function Stub() {
-						console.log(str("执行方法").a(n).a("失败,执行了stub的方法!").s());
-					};
+					return null;
 				}
 			} else {
 				//值不空时为设定属性值
@@ -258,6 +255,19 @@
 			}
 			//返回本身用于链式编程用
 			return this;
+		}
+		/**
+		 * 安全调用.
+		 */
+		function safeCall(n){
+			if (c.hasOwnProperty(n)) {
+				return c[n];
+			} else {
+				console.log(str("找寻属性").a(n).a("失败,返回stub方法!").s());
+				return function Stub() {
+					console.log(str("执行方法").a(n).a("失败,执行了stub的方法!").s());
+				};
+			}
 		}
 		/**
 		 * 扩展.
@@ -358,6 +368,47 @@
 			result = result.substring(startIndex);
 			return result;
 		}
+		function filt(obj,filtcase){
+			if(typeof obj !== "undefined" && typeof filtcase === "string"){
+				//结果声明.
+				var a = {};
+				//如果是数组则有计数器
+				var c = 0;
+				//判断是否是数组
+				var isa = false;
+				if(isArray(obj)){
+					a = [];
+					isa = true;
+				}
+				var func = function(){ return null; };
+				//构造判断方法
+				eval(str("func =  function(x,y,type,that){ return ")
+					.a(filtcase).a("; };").s());
+				//如果是正确的方法
+				if(typeof func === "function"){
+					loop(obj,function(x,y,type,that){
+						var flag = true;
+						try{
+							flag = func(x,y,type,that);
+						} catch(e){
+							console.log(str("执行filt出错，filtcase为:").a(filtcase)
+									.a("对象为:").s());
+							console.log(obj);
+							flag = true;
+						}
+						if(flag){
+							if(isa){
+								a[c++] = x;
+							} else {
+								a[y] = x;
+							}
+						}
+					});
+				}
+				return a;
+			}
+			return obj;
+		}
 		/**
 		 * 加载插件.
 		 */
@@ -388,8 +439,9 @@
 			// 返回基础方法
 			return [ "load", "attr", "isArray", "valid", "$val", "loop", "ext",
 					"closure", "get", "str", "deepen", "version", "clone",
-					"loadPlugins", "findContext", "containsClosure",
-					"getQuery", "urlQuerys", "getQueryByIndex","querystrings" ];
+					"filt", "loadPlugins", "findContext", "containsClosure",
+					"safeCall", "getQuery", "urlQuerys", "getQueryByIndex",
+					"querystrings" ];
 		}
 		if (typeof querylist !== "undefined" && querylist != null
 				&& isArray(querylist) && querylist.length > 0) {

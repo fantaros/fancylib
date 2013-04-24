@@ -1,14 +1,27 @@
-﻿<script type="text/javascript" src="libs/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="libs/fancy-extends.js"></script>
-<script type="text/javascript" src="libs/fancy-config.js"></script>
-<script type="text/javascript" src="libs/fancy.js"></script>
+﻿<script src="libs/jquery-1.7.2.min.js"></script>
+<script src="libs/fancy-extends.js"></script>
+<script src="fancy-config.js"></script>
+<script src="libs/fancy.js"></script>
 <script>
-	Fancy.baseUrl = "libs/";
+	Fancy.baseUrl = "";
+	Fancy.libBaseUrl = "";
 	$(function(){
+		Fancy.loadPlugins();
 		var path = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
 		//console.log(Object.toString.call(Fancy));
 		$("#fancy_stringbuffer").html(Fancy.str("how ").a("to ").a("use ")
 				.a("a StringBuffer in FancyLib").a(" as Fancy.str").s());
+		$("#fancy_bind_test").bind("click",{"a":"a","b":"s"},function(){
+			$(this).html(arguments[0]);
+		});
+		var z = [2,1,7,8,6,5,4,3,2,2];
+		var y = Fancy.filt(z,"x>3&&x<7");
+		$("#fancy_filt").html(JSON.stringify(y));
 	});
 </script>
 <div id="fancy_stringbuffer"></div>
+<div>
+<div id="fancy_filt"></div>
+<div>
+<!-- <button id="fancy_bind_test"></button> -->
+</div>
