@@ -134,6 +134,16 @@
 			}
 			return c;
 		}
+		function deep(attrname) {
+			if (typeof c !== "undefined" && typeof c === "function"
+					&& typeof attrname === "string") {
+				if (c.hasOwnProperty(attrname)) {
+					// 遍历并扩展
+					c.func(attrname, c[attrname]);
+				}
+			}
+			return c;
+		}
 		/**
 		 * 字符串拼接工具
 		 */
@@ -226,6 +236,25 @@
 				//创造克隆对象
 				return new Type();
 			}
+		}
+		/**
+		 * 合并为数组.
+		 */
+		function merge(){
+			var arr = [];
+			if(valid(arguments) && arguments.length>0){
+				for(var i = 0; i<arguments.length;++i){
+					var a = arguments[i];
+					if(isArray(a)){
+						loop(a,function(v){
+							arr.push(v);
+						});
+					} else if(valid(a)){
+						arr.push(a);
+					}
+				}
+			}
+			return arr;
 		}
 		/**
 		 * 遍历.
@@ -338,7 +367,7 @@
 		//获得window上的QueryString
 		var querylist = urlQuerys();
 		//封装这些QueryString
-		var querystrings = {};
+		var Querys = {};
 		/**
 		 * 根据QueryString参数名称获取值.
 		 */
@@ -363,13 +392,15 @@
 			if (index >= querylist.length) {
 				return "";
 			}
-			var result = querylist[index];
 			var startIndex = result.indexOf("=") + 1;
 			result = result.substring(startIndex);
 			return result;
 		}
-		function filt(obj,filtcase){
-			if(typeof obj !== "undefined" && typeof filtcase === "string"){
+		/**
+		 * 过滤对象的一些成员.
+		 */
+		function filter(obj,filtercase){
+			if(typeof obj !== "undefined"){
 				//结果声明.
 				var a = {};
 				//如果是数组则有计数器
@@ -380,23 +411,25 @@
 					a = [];
 					isa = true;
 				}
-				var func = function(){ return null; };
-				//构造判断方法
-				eval(str("func =  function(x,y,type,that){ return ")
-					.a(filtcase).a("; };").s());
+				var func = filtercase;
+				if(typeof filtercase === "string"){
+					//构造判断方法
+					eval(str("func =  function(x,y,type,that){ return ")
+							.a(filtercase).a("; };").s());
+				}
 				//如果是正确的方法
 				if(typeof func === "function"){
 					loop(obj,function(x,y,type,that){
-						var flag = true;
+						var flag = false;
 						try{
 							flag = func(x,y,type,that);
 						} catch(e){
-							console.log(str("执行filt出错，filtcase为:").a(filtcase)
+							console.log(str("执行filter出错，filtercase为:").a(filtercase)
 									.a("对象为:").s());
 							console.log(obj);
-							flag = true;
+							flag = false;
 						}
-						if(flag){
+						if(flag===true){
 							if(isa){
 								a[c++] = x;
 							} else {
@@ -413,13 +446,20 @@
 		 * 加载插件.
 		 */
 		function loadPlugins(){
-			if (typeof c.config !== "undefined" && isArray(c.config)) {
-				loop(c.config, function(val) {
-					//循环加载config里配置好的 plugins文件夹下的js文件
-					load(str(c.libBaseUrl).a("plugins/").a(val)
-							.a(".js").s());
+			var config = merge("json2",c.config);
+			if (typeof config !== "undefined" && isArray(config)) {
+				var loaded = {};
+				loop(config, function(val) {
+					if(valid(val) && (!valid(loaded[val]) || loaded[val] === false)){
+						//循环加载config里配置好的 plugins文件夹下的js文件
+						load(str(c.libBaseUrl).a("plugins/").a(val)
+								.a(".js").s());
+						loaded[val] = true;
+					}
 				});
+				return loaded;
 			}
+			return null;
 		}
 		/**
 		 * 获取配置.
@@ -439,13 +479,13 @@
 			// 返回基础方法
 			return [ "load", "attr", "isArray", "valid", "$val", "loop", "ext",
 					"closure", "get", "str", "deepen", "version", "clone",
-					"filt", "loadPlugins", "findContext", "containsClosure",
+					"filter", "loadPlugins", "findContext", "containsClosure",
 					"safeCall", "getQuery", "urlQuerys", "getQueryByIndex",
-					"querystrings" ];
+					"Querys", "deep","merge" ];
 		}
 		if (typeof querylist !== "undefined" && querylist != null
 				&& isArray(querylist) && querylist.length > 0) {
-			//循环设置querystring到querystrings节
+			//循环设置querystring到Querys节
 			loop(querylist,function(val){
 				var s = val.indexOf("=") ;
 				var v = null;
@@ -455,12 +495,12 @@
 					k = val.substr(0,s);
 				}
 				if(v!=null && k!=null){
-					querystrings[k] = v;
+					Querys[k] = v;
 				}
 			});
 		}
 		//特殊：如果脚本加载时设定fancybaseurl则会覆盖这个值
-		var fancybaseurl = $val(querystrings["fancybaseurl"]);
+		var fancybaseurl = $val(Querys["fancybaseurl"]);
 		if(typeof fancybaseurl !== "undefined" && fancybaseurl != null){
 			c.baseUrl = fancybaseurl.trim();
 		}
