@@ -73,11 +73,11 @@
     		            name : "String concat",
     		            val : delay3
     		        });
-    		        rtext = "<br/>完成基线测试 深度为";
-    		        rtext += depth;
-    		        rtext += "轮<br/>";
+    		        rtext = "<br/>";
     		        for(i=0;i<results.length;++i){
-    		            rtext += "基线项目 ";
+    		            rtext += "基线项目 (";
+    		            rtext += depth;
+    		            rtext += ")轮 ";
     		            rtext += results[i]["name"];
     		            rtext += " : ";
     		            rtext += results[i]["val"];
