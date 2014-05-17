@@ -4,7 +4,7 @@
     <title>baselines - string - concat</title>
     <script src="../../libs/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-      ( function ( $ ) {
+      ( function ( window, $ ) {
         var preData = ["测试字符串1","test string NO.2","testtesttest","sth. else","abcdefghijklmn"]
             , i = 0
             , buffer
@@ -15,8 +15,8 @@
             , delay2
             , delay3
             , rtext = ""
-            , results = []
-            , baseline_test = function (depth){
+            , results = [];
+            window.baseline_test = function (depth){
             		depth = depth || 50000;
             		window.console && console.log("开始测试 深度:",depth);
             		buffer = "";
@@ -86,16 +86,16 @@
     		        $("#results").html(rtext);
     		        window.console && console.log("结束");
             };
-        $(function () {
+    } ) ( window, window.jQuery );
+    $(function () {
             $("button").eq(0).click(function (){
            		var num = (+$("input[type='text']").eq(0).val());
            		if(isNaN(num)) {
            			num = 50000;
            		}
-           		baseline_test(num);
+           		window.baseline_test(num);
            	});
-        });
-    } ) ( window.jQuery );
+    });
     </script>
 </head>
 <body>
