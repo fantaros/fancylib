@@ -35,6 +35,7 @@
     		        delay1 = etimer.getTime() - stimer.getTime();
     		        results.push({
     		            name : "直接+=",
+    		            depth : depth,
     		            val : delay1
     		        });
     		        buffer = [];
@@ -53,6 +54,7 @@
     		        delay2 = etimer.getTime() - stimer.getTime();
     		        results.push({
     		            name : "Array Join",
+   		            depth : depth,
     		            val : delay2
     		        });
     		        buffer = "";
@@ -71,12 +73,13 @@
     		        delay3 = etimer.getTime() - stimer.getTime();
     		        results.push({
     		            name : "String concat",
+   		            depth : depth,
     		            val : delay3
     		        });
     		        rtext = "<br/>";
     		        for(i=0;i<results.length;++i){
     		            rtext += "基线项目 (";
-    		            rtext += depth;
+    		            rtext += results[i]["depth"];
     		            rtext += ")轮 ";
     		            rtext += results[i]["name"];
     		            rtext += " : ";
